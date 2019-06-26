@@ -4,14 +4,15 @@ const Team = require('./model')
 
 router.get('/team', function (req, res, next) {
     Team.findAll()
-        .then(team => res.json({ teams: team }))
-        .catch(err => {
-            res.status(500).json({
-                message: 'Something went wrong',
-                error: err
-            })
-            next()
-        })
+        .then(teams => res.json({teams: teams}))
+        .catch(err => next(err))
+})
+
+router.post('/team', function (req, res, next) {
+    Team
+        .create(req.body)
+        .then(teams => res.json(teams))
+        .catch(err => next(err))
 })
 
 module.exports = router
