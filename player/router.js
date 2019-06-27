@@ -4,10 +4,17 @@ const router = express.Router()
 const Player = require('./model')
 
 router.get('/player', function (req, res, next) {
-    Player
-        .findAll()
-        .then(players => res.json({ players: players }))
-        .catch(err => next(err))
+    const limit = req.query.limit || 25
+    const offset = req.query.offset || 0
+
+    Promise.all([
+        Player.count(),
+        Player.findAll({ limit, offset })
+    ])
+        .then(([total, players]) => {
+            res.send({ players, total })
+        })
+        .catch(error => next(error))
 })
 
 router.post('/player', function (req, res, next) {

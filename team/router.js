@@ -3,9 +3,17 @@ const router = express.Router()
 const Team = require('./model')
 
 router.get('/team', function (req, res, next) {
-    Team.findAll()
-        .then(teams => res.json({ teams: teams }))
-        .catch(err => next(err))
+    const limit = req.query.limit || 10
+    const offset = req.query.offset || 0
+
+    Promise.all([
+        Team.count(),
+        Team.findAll({ limit, offset })
+    ])
+        .then(([total, teams]) => {
+            res.send({ teams, total })
+        })
+        .catch(error => next(error))
 })
 
 router.post('/team', function (req, res, next) {
