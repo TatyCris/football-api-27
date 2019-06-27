@@ -16,3 +16,11 @@ router.post('/user', function (req, res, next) {
 })
 
 module.exports = router
+
+// const { Router } = require(‘express’);
+// const router = new Router();
+
+        //    res.status(201).json({
+        //            message: “A NEW USER WAS ADDED - better not show that password...“,
+        //            “new user”: user
+        //     })
